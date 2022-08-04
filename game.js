@@ -1,4 +1,4 @@
-let height = window.innerHeight * 3;
+let height = window.innerHeight;
 let width = window.innerWidth;
 let SPEED = 900;
 
@@ -11,33 +11,28 @@ kaboom({
 });
 // console.log(window.innerHeight);
 loadRoot("./assets/");
-loadSprite("player", "ogre.png");
+loadSprite("paddle", "paddle.png");
+loadSprite("ball", "ball.png");
 
-const player = add([
-	sprite("player"),
+const paddle = add([
+	sprite("paddle"),
 	scale(0.2, 0.2),
 	body(),
 	solid(),
 	area(),
 	pos(100, 100),
-	"player",
+	"paddle",
 	// origin(0, 0),
 ]);
 
-player.onUpdate(() => {
+paddle.onUpdate(() => {
 	//updates
 });
-add([
-	sprite("floor"),
-	scale(1000, 10),
-	pos(-1000, height - 50),
-	solid(),
-	area(),
-]);
+add([sprite("floor"), scale(1000, 10), pos(0, height), solid(), area()]);
 const wall = add([
 	sprite("wall"),
 	scale(1, 8.5),
-	pos(-width / 2, -height),
+	pos(0, -height),
 	solid(),
 	area(),
 	"wall",
@@ -47,20 +42,11 @@ onKeyPress("enter", () => {
 	bgMusic.play();
 });
 
-onKeyDown("v", () => {
-	if (player.isGrounded()) {
-		player.jump(DOUBLE_JUMP);
-		whoosh.play();
-	}
-});
-
-onKeyDown("right", () => {
-	console.log(player);
-	move((player.pos.x += SPEED * dt()));
+onKeyDown("down", () => {
+	move((paddle.pos.y += SPEED * dt()));
 	cleanup();
 });
-onKeyDown("left", () => {
-	console.log(player);
-	move((player.pos.x -= SPEED * dt()));
+onKeyDown("up", () => {
+	move((paddle.pos.y -= SPEED * dt()));
 	cleanup();
 });

@@ -10,43 +10,79 @@ kaboom({
 	background: [100, 200, 255],
 });
 // console.log(window.innerHeight);
-loadRoot("./assets/");
-loadSprite("paddle", "paddle.png");
-loadSprite("ball", "ball.png");
 
-const paddle = add([
-	sprite("paddle"),
-	scale(0.2, 0.2),
+loadSprite("paddle", "paddle.png");
+loadSprite("paddle2", "paddle.png");
+
+loadSprite("ball", "ball.png");
+const ball = add([
+	sprite("ball"),
+	scale(0.5),
 	body(),
 	solid(),
 	area(),
-	pos(100, 100),
+	pos(120, 0),
+	"ball",
+	// origin(0, 0),
+]);
+
+const paddle = add([
+	sprite("paddle"),
+	scale(1),
+	// body(),
+	solid(),
+	area(),
+	pos(width * 0.025, height / 2),
 	"paddle",
+	// origin(0, 0),
+]);
+
+const paddle2 = add([
+	sprite("paddle2"),
+	scale(1),
+	// body(),
+	solid(),
+	area(),
+	pos(width * 0.9, height / 2),
+	"paddle2",
 	// origin(0, 0),
 ]);
 
 paddle.onUpdate(() => {
 	//updates
 });
-add([sprite("floor"), scale(1000, 10), pos(0, height), solid(), area()]);
-const wall = add([
-	sprite("wall"),
-	scale(1, 8.5),
-	pos(0, -height),
-	solid(),
+add([
+	rect(width, 20),
+	pos(0, height - 48),
+	outline(4),
 	area(),
-	"wall",
+	solid(),
+	color(127, 200, 255),
 ]);
 
 onKeyPress("enter", () => {
 	bgMusic.play();
 });
 
+onKeyDown("up", () => {
+	move((paddle2.pos.y -= SPEED * dt()));
+	cleanup();
+});
 onKeyDown("down", () => {
+	console.log(paddle);
+	move((paddle2.pos.y += SPEED * dt()));
+	cleanup();
+});
+onKeyDown("w", () => {
+	move((paddle.pos.y -= SPEED * dt()));
+	cleanup();
+});
+onKeyDown("s", () => {
+	console.log(paddle);
 	move((paddle.pos.y += SPEED * dt()));
 	cleanup();
 });
-onKeyDown("up", () => {
-	move((paddle.pos.y -= SPEED * dt()));
-	cleanup();
+
+onCollide("ball", "paddle", () => {
+	move((ball.pos.x += 75));
 });
